@@ -1,0 +1,52 @@
+{
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "cTAJdxBZCy5N4cVYPVh0TdRnU1CKTlxiH6mRSee/haEZU33G",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "queues": [
+    {
+      "name": "action.events",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "delayedRedeliveryExchange",
+        "x-dead-letter-routing-key": "action.events"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "action-case-exchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "action-case-exchange",
+      "vhost": "/",
+      "destination": "action.events",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": {}
+    }
+  ]
+}

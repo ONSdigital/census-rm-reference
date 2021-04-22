@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  ons-postgres:
+    container_name: postgres
+    image: postgres:11
+    command: ["-c", "shared_buffers=256MB", "-c", "max_connections=500"]
+    ports:
+      - "${EX_POSTGRES_PORT}:5432"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - censusrmdockerdev_reference
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.8-management
+    ports:
+      - "5369:4369"
+      - "45672:25672"
+      - "${EX_RABBIT_PORT}:5671-5672"
+      - "16671-16672:15671-15672"
+    environment:
+      - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/definitions.json:/opt/definitions.json
+    networks:
+      - censusrmdockerdev_reference
+
+networks:
+  censusrmdockerdev_reference:
+    external: true
