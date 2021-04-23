@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:6432/postgres
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+    hikari:
+      maximumPoolSize: 50
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+#        default_schema: casev2
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 6672
+    virtualhost: /
+
+queueconfig:
+  inbound-queue: case.sample.inbound
+  outbound-exchange: outbound-exchange
+  outbound-routing-key: case.sample.outbound
+  consumers: 50
+
+logging:
+  level:
+    org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler: INFO
+

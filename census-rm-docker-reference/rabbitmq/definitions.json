@@ -18,19 +18,39 @@
   ],
   "queues": [
     {
-      "name": "action.events",
+      "name": "case.sample.inbound",
       "vhost": "/",
       "durable": true,
       "auto_delete": false,
       "arguments": {
         "x-dead-letter-exchange": "delayedRedeliveryExchange",
-        "x-dead-letter-routing-key": "action.events"
+        "x-dead-letter-routing-key": "case.sample.inbound"
       }
-    }
+    },
+    {
+      "name": "case.sample.outbound",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "delayedRedeliveryExchange",
+        "x-dead-letter-routing-key": "case.sample.outbound"
+      }
+    },
+
   ],
   "exchanges": [
     {
-      "name": "action-case-exchange",
+      "name": "inbound-exchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "outbound-exchange",
       "vhost": "/",
       "type": "direct",
       "durable": true,
@@ -41,11 +61,19 @@
   ],
   "bindings": [
     {
-      "source": "action-case-exchange",
+      "source": "outbound-exchange",
       "vhost": "/",
-      "destination": "action.events",
+      "destination": "case.sample.outbound",
       "destination_type": "queue",
-      "routing_key": "",
+      "routing_key": "case.sample.outbound",
+      "arguments": {}
+    },
+    {
+      "source": "inbound-exchange",
+      "vhost": "/",
+      "destination": "case.sample.inbound",
+      "destination_type": "queue",
+      "routing_key": "case.sample.inbound",
       "arguments": {}
     }
   ]

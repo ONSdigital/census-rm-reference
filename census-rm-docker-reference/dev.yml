@@ -27,6 +27,19 @@ services:
     networks:
       - censusrmdockerdev_reference
 
+#  caseprocessor:
+#    container_name: caseprocessor
+#    image: eu.gcr.io/census-rm-ci/rm/census-rm-case-processor
+#    external_links:
+#      - postgres
+#      - rabbitmq
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:${POSTGRES_PORT}/${POSTGRES_HOST}?sslmode=disable
+#      - SPRING_RABBITMQ_HOST=${RABBIT_HOST}
+#      - SPRING_RABBITMQ_PORT=${RABBIT_PORT}
+#      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+#      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
 networks:
   censusrmdockerdev_reference:
     external: true
