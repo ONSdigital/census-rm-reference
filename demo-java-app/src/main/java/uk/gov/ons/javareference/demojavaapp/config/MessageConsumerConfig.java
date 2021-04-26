@@ -1,5 +1,7 @@
 package uk.gov.ons.javareference.demojavaapp.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -16,9 +18,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.CreateCaseSample;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class MessageConsumerConfig {
@@ -39,7 +38,6 @@ public class MessageConsumerConfig {
     return new DirectChannel();
   }
 
-
   @Bean
   public AmqpInboundChannelAdapter inboundSamples(
       @Qualifier("sampleContainer") SimpleMessageListenerContainer listenerContainer,
@@ -51,7 +49,6 @@ public class MessageConsumerConfig {
   public SimpleMessageListenerContainer sampleContainer() {
     return setupListenerContainer(inboundQueue, CreateCaseSample.class);
   }
-
 
   private SimpleMessageListenerContainer setupListenerContainer(
       String queueName, Class expectedMessageType) {

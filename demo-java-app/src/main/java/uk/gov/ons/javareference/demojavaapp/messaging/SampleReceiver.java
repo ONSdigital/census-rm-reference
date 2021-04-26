@@ -1,5 +1,10 @@
 package uk.gov.ons.javareference.demojavaapp.messaging;
 
+import static uk.gov.ons.javareference.demojavaapp.utility.MsgDateHelper.getMsgTimeStamp;
+
+import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.annotation.MessageEndpoint;
@@ -10,12 +15,6 @@ import uk.gov.ons.javareference.demojavaapp.models.dtos.CreateCaseSample;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCase;
 import uk.gov.ons.javareference.demojavaapp.models.entities.Case;
 import uk.gov.ons.javareference.demojavaapp.models.repository.CaseRepository;
-
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
-import static uk.gov.ons.javareference.demojavaapp.utility.MsgDateHelper.getMsgTimeStamp;
 
 @MessageEndpoint
 public class SampleReceiver {
@@ -44,7 +43,8 @@ public class SampleReceiver {
 
   private void readSavedCaseAndEmitToOutbound(UUID caseId) {
 
-    Case caze  = getCaseByCaseId(caseId);
+//    pointless DB read in some ways, but we're also proving that it was saved to the DB
+    Case caze = getCaseByCaseId(caseId);
 
     OutboundCase outboundCase = new OutboundCase();
     outboundCase.setId(caseId);

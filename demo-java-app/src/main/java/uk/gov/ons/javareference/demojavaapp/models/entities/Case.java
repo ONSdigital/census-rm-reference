@@ -1,19 +1,15 @@
 package uk.gov.ons.javareference.demojavaapp.models.entities;
 
-import lombok.Data;
-
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
-
+import lombok.Data;
 
 @Data
 @Entity
-@Table(
-    name = "cases"
-    )
+@Table(name = "cases")
 public class Case {
 
   @Id private UUID caseId;;
