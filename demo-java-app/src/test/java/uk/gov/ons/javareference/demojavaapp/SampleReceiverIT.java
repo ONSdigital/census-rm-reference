@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.ons.javareference.demojavaapp.models.dtos.CreateCaseSample;
-import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCase;
+import uk.gov.ons.javareference.demojavaapp.models.dtos.InboundCaseDto;
+import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.testutil.QueueSpy;
 import uk.gov.ons.javareference.demojavaapp.testutil.RabbitQueueHelper;
 
@@ -27,17 +27,17 @@ class SampleReceiverIT {
 
     try (QueueSpy caseQueueSpy = rabbitQueueHelper.listen("case.sample.outbound")) {
       // Given
-      CreateCaseSample createCaseSample = new CreateCaseSample();
-      createCaseSample.setAddressLine1("Hello");
-      createCaseSample.setPostcode("World");
+      InboundCaseDto inboundCaseDto = new InboundCaseDto();
+      inboundCaseDto.setAddressLine1("Hello");
+      inboundCaseDto.setPostcode("World");
 
       // When
-      rabbitQueueHelper.sendMessage("case.sample.inbound", createCaseSample);
+      rabbitQueueHelper.sendMessage("case.sample.inbound", inboundCaseDto);
 
-      OutboundCase outboundCase = caseQueueSpy.checkExpectedMessageReceived();
+      OutboundCaseDto outboundCaseDto = caseQueueSpy.checkExpectedMessageReceived();
 
-      assertThat(outboundCase.getAddressLine1()).isEqualTo("Hello");
-      assertThat(outboundCase.getPostcode()).isEqualTo("World");
+      assertThat(outboundCaseDto.getAddressLine1()).isEqualTo("Hello");
+      assertThat(outboundCaseDto.getPostcode()).isEqualTo("World");
     }
   }
 }

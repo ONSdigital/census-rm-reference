@@ -11,8 +11,8 @@ import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.ons.javareference.demojavaapp.models.dtos.CreateCaseSample;
-import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCase;
+import uk.gov.ons.javareference.demojavaapp.models.dtos.InboundCaseDto;
+import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.models.entities.Case;
 import uk.gov.ons.javareference.demojavaapp.models.repository.CaseRepository;
 
@@ -34,7 +34,8 @@ public class SampleReceiver {
 
   @Transactional
   @ServiceActivator(inputChannel = "caseSampleInputChannel")
-  public void receiveMessage(Message<CreateCaseSample> message) {
+  public void receiveMessage(Message<InboundCaseDto> message) {
+    //    might want to record this
     OffsetDateTime messageTimestamp = getMsgTimeStamp(message);
 
     UUID caseId = createAndSaveNewCase(message.getPayload());
@@ -43,18 +44,18 @@ public class SampleReceiver {
 
   private void readSavedCaseAndEmitToOutbound(UUID caseId) {
 
-    //    pointless DB read in some ways, but we're also proving that it was saved to the DB
+    //    pointless DB read, but we're also proving that it was saved to the DB
     Case caze = getCaseByCaseId(caseId);
 
-    OutboundCase outboundCase = new OutboundCase();
-    outboundCase.setId(caseId);
-    outboundCase.setAddressLine1(caze.getAddressLine1());
-    outboundCase.setPostcode(caze.getPostcode());
+    OutboundCaseDto outboundCaseDto = new OutboundCaseDto();
+    outboundCaseDto.setId(caze.getCaseId());
+    outboundCaseDto.setAddressLine1(caze.getAddressLine1());
+    outboundCaseDto.setPostcode(caze.getPostcode());
 
-    rabbitTemplate.convertAndSend(outboundExchange, outboundRoutingKey, outboundCase);
+    rabbitTemplate.convertAndSend(outboundExchange, outboundRoutingKey, outboundCaseDto);
   }
 
-  private UUID createAndSaveNewCase(CreateCaseSample sampleCase) {
+  private UUID createAndSaveNewCase(InboundCaseDto sampleCase) {
     Case caze = new Case();
     caze.setCaseId(UUID.randomUUID());
     caze.setAddressLine1(sampleCase.getAddressLine1());
@@ -65,7 +66,7 @@ public class SampleReceiver {
     return caze.getCaseId();
   }
 
-  public Case getCaseByCaseId(UUID caseId) {
+  private Case getCaseByCaseId(UUID caseId) {
     Optional<Case> cazeResult = caseRepository.findById(caseId);
 
     if (cazeResult.isEmpty()) {

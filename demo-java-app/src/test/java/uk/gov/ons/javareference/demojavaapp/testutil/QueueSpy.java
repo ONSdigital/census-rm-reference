@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCase;
+import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.utility.ObjectMapperFactory;
 
 @AllArgsConstructor
@@ -25,12 +25,12 @@ public class QueueSpy implements AutoCloseable {
     container.stop();
   }
 
-  public OutboundCase checkExpectedMessageReceived() throws IOException, InterruptedException {
+  public OutboundCaseDto checkExpectedMessageReceived() throws IOException, InterruptedException {
     String actualMessage = queue.poll(20, TimeUnit.SECONDS);
     assertNotNull("Did not receive message before timeout", actualMessage);
-    OutboundCase outboundCase = objectMapper.readValue(actualMessage, OutboundCase.class);
-    assertNotNull(outboundCase);
-    return outboundCase;
+    OutboundCaseDto outboundCaseDto = objectMapper.readValue(actualMessage, OutboundCaseDto.class);
+    assertNotNull(outboundCaseDto);
+    return outboundCaseDto;
   }
 
   public void checkMessageIsNotReceived(int timeOut) throws InterruptedException {

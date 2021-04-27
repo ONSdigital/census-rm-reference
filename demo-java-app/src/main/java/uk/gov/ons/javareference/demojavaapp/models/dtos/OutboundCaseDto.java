@@ -4,7 +4,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class OutboundCase {
+public class OutboundCaseDto {
   private UUID id;
   private String addressLine1;
   private String postcode;

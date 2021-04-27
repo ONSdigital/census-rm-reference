@@ -17,7 +17,7 @@ import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.interceptor.RetryOperationsInterceptor;
-import uk.gov.ons.javareference.demojavaapp.models.dtos.CreateCaseSample;
+import uk.gov.ons.javareference.demojavaapp.models.dtos.InboundCaseDto;
 
 @Configuration
 public class MessageConsumerConfig {
@@ -47,7 +47,7 @@ public class MessageConsumerConfig {
 
   @Bean
   public SimpleMessageListenerContainer sampleContainer() {
-    return setupListenerContainer(inboundQueue, CreateCaseSample.class);
+    return setupListenerContainer(inboundQueue, InboundCaseDto.class);
   }
 
   private SimpleMessageListenerContainer setupListenerContainer(
