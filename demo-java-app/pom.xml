@@ -160,7 +160,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <executable>true</executable>
-                    <mainClass>uk.gov.ons.javareference.demojavaapp.DemoJavaAppApplicationn</mainClass>
+                    <mainClass>uk.gov.ons.javareference.demojavaapp.DemoJavaAppApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
