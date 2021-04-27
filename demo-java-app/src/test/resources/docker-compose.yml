@@ -1,0 +1,24 @@
+version: '2.1'
+services:
+  postgres:
+    container_name: postgres-demo-it
+    image: sdcplatform/ras-rm-docker-postgres
+    command: ["-c", "shared_buffers=256MB", "-c", "max_connections=200"]
+    ports:
+      - "15432:5432"
+
+  rabbitmq:
+    container_name: rabbitmq-demo-it
+    image: rabbitmq:3.8-management
+    ports:
+      - "34369:4369"
+      - "55672:25672"
+      - "35671:5671"
+      - "35672:5672"
+      - "46671:15671"
+      - "46672:15672"
+    environment:
+      - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./definitions.json:/opt/definitions.json:ro

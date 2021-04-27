@@ -43,7 +43,7 @@ public class SampleReceiver {
 
   private void readSavedCaseAndEmitToOutbound(UUID caseId) {
 
-//    pointless DB read in some ways, but we're also proving that it was saved to the DB
+    //    pointless DB read in some ways, but we're also proving that it was saved to the DB
     Case caze = getCaseByCaseId(caseId);
 
     OutboundCase outboundCase = new OutboundCase();

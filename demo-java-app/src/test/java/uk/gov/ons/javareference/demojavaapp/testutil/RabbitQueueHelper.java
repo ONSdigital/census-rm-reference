@@ -1,5 +1,7 @@
 package uk.gov.ons.javareference.demojavaapp.testutil;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -12,21 +14,15 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 @Component
 @ActiveProfiles("test")
 @EnableRetry
 public class RabbitQueueHelper {
-  @Autowired
-  private ConnectionFactory connectionFactory;
+  @Autowired private ConnectionFactory connectionFactory;
 
-  @Autowired
-  private RabbitTemplate rabbitTemplate;
+  @Autowired private RabbitTemplate rabbitTemplate;
 
-  @Autowired
-  private AmqpAdmin amqpAdmin;
+  @Autowired private AmqpAdmin amqpAdmin;
 
   public QueueSpy listen(String queueName) {
     BlockingQueue<String> transfer = new ArrayBlockingQueue(200);
