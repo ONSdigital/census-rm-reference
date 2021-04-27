@@ -4,8 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+behave = "*"
+pika = "*"
+structlog = "*"
 
 [dev-packages]
-
-[requires]
-python_version = "3.7"
+"flake8" = "*"
