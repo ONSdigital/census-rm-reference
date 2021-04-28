@@ -34,7 +34,7 @@ Instead of running the acceptance tests, you can submit messages manually into r
 To do so, place a message using the following format onto the **`case.sample.inbound`** queue:
 ```json
 {
-    'addressLine1': 'blah blah blah',
-    'postcode': 'bl4 61a'
+   "addressLine1":"blah blah blah",
+   "postcode":"bl4 61a"
 }
 ```
