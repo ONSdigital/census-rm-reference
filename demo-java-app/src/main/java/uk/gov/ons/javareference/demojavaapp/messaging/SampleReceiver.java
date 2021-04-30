@@ -38,7 +38,7 @@ public class SampleReceiver {
     //    might want to record this
     OffsetDateTime messageTimestamp = getMsgTimeStamp(message);
 
-    UUID caseId = createAndSaveNewCase(message.getPayload());
+    UUID caseId = createAndSaveNewCase(message.getPayload(), messageTimestamp);
     readSavedCaseAndEmitToOutbound(caseId);
   }
 
@@ -55,11 +55,12 @@ public class SampleReceiver {
     rabbitTemplate.convertAndSend(outboundExchange, outboundRoutingKey, outboundCaseDto);
   }
 
-  private UUID createAndSaveNewCase(InboundCaseDto sampleCase) {
+  private UUID createAndSaveNewCase(InboundCaseDto sampleCase, OffsetDateTime messageTimestamp) {
     Case caze = new Case();
     caze.setCaseId(UUID.randomUUID());
     caze.setAddressLine1(sampleCase.getAddressLine1());
     caze.setPostcode(sampleCase.getPostcode());
+    caze.setMsgDateTime(messageTimestamp);
 
     caseRepository.saveAndFlush(caze);
 

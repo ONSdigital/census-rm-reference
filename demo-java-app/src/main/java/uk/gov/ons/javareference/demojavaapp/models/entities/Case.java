@@ -1,5 +1,6 @@
 package uk.gov.ons.javareference.demojavaapp.models.entities;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,4 +16,5 @@ public class Case {
   @Id private UUID caseId;;
   @Column private String addressLine1;
   @Column private String postcode;
+  @Column OffsetDateTime msgDateTime;
 }
