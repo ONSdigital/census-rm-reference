@@ -1,6 +1,6 @@
 version: "3.4"
 services:
-  caseprocessor:
+  demo-java:
     container_name: demo-java
     image: eu.gcr.io/census-rm-ci/rm/demo-java-app
     external_links:
