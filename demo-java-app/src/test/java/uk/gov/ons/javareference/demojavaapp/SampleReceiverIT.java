@@ -2,15 +2,19 @@ package uk.gov.ons.javareference.demojavaapp;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.InboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCaseDto;
+import uk.gov.ons.javareference.demojavaapp.models.repository.CaseRepository;
 import uk.gov.ons.javareference.demojavaapp.testutil.QueueSpy;
 import uk.gov.ons.javareference.demojavaapp.testutil.RabbitQueueHelper;
 
@@ -21,6 +25,21 @@ import uk.gov.ons.javareference.demojavaapp.testutil.RabbitQueueHelper;
 class SampleReceiverIT {
 
   @Autowired private RabbitQueueHelper rabbitQueueHelper;
+  @Autowired private CaseRepository caseRepository;
+
+  @Value("${queueconfig.outbound-queue}")
+  private String outboundQueue;
+
+  @Value("${queueconfig.inbound-queue}")
+  private String inboundQueue;
+
+  @Before
+  @Transactional
+  public void setUp() {
+    rabbitQueueHelper.purgeQueue(inboundQueue);
+    rabbitQueueHelper.purgeQueue(outboundQueue);
+    caseRepository.deleteAllInBatch();
+  }
 
   @Test
   public void writeMessageToInboundEndsUpOnOutboundQueue() throws Exception {

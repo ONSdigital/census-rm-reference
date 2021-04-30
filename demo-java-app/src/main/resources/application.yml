@@ -11,13 +11,14 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
-#        default_schema: casev2
+        default_schema: cases
         jdbc:
           lob:
             non_contextual_creation: true
+
 
 
   rabbitmq:
