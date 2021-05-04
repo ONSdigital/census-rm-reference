@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.InboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.models.entities.Case;
+import uk.gov.ons.javareference.demojavaapp.models.entities.CaseMetadata;
 import uk.gov.ons.javareference.demojavaapp.models.repository.CaseRepository;
 
 @MessageEndpoint
@@ -55,12 +56,14 @@ public class SampleReceiver {
     rabbitTemplate.convertAndSend(outboundExchange, outboundRoutingKey, outboundCaseDto);
   }
 
-  private UUID createAndSaveNewCase(InboundCaseDto sampleCase, OffsetDateTime messageTimestamp) {
+  private UUID createAndSaveNewCase(
+      InboundCaseDto inboundCaseDto, OffsetDateTime messageTimestamp) {
     Case caze = new Case();
     caze.setCaseId(UUID.randomUUID());
-    caze.setAddressLine1(sampleCase.getAddressLine1());
-    caze.setPostcode(sampleCase.getPostcode());
+    caze.setAddressLine1(inboundCaseDto.getAddressLine1());
+    caze.setPostcode(inboundCaseDto.getPostcode());
     caze.setMsgDateTime(messageTimestamp);
+    caze.setMetadata(getMetaData(inboundCaseDto));
 
     caseRepository.saveAndFlush(caze);
 
@@ -74,5 +77,14 @@ public class SampleReceiver {
       throw new RuntimeException(String.format("Case ID '%s' not present", caseId));
     }
     return cazeResult.get();
+  }
+
+  //  pointless but demos a json blob stored in the DB.
+  private CaseMetadata getMetaData(InboundCaseDto inboundCaseDto) {
+    CaseMetadata caseMetadata = new CaseMetadata();
+    caseMetadata.setABoolean(true);
+    caseMetadata.setAddressString(
+        inboundCaseDto.getAddressLine1() + " " + inboundCaseDto.getPostcode() + "");
+    return caseMetadata;
   }
 }
