@@ -4,14 +4,16 @@ services:
     container_name: demo-java
     image: eu.gcr.io/census-rm-ci/rm/demo-java-app
     external_links:
-      - postgres
-      - rabbitmq
+      - postgres-ref
+      - rabbitmq-ref
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:${POSTGRES_PORT}/${POSTGRES_HOST}?sslmode=disable
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-ref:${POSTGRES_PORT}/${POSTGRES_HOST}?sslmode=disable
       - SPRING_RABBITMQ_HOST=${RABBIT_HOST}
       - SPRING_RABBITMQ_PORT=${RABBIT_PORT}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - censusrmdockerdev_reference
 
 networks:
   default:
