@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.InboundCaseDto;
 import uk.gov.ons.javareference.demojavaapp.models.dtos.OutboundCaseDto;
+import uk.gov.ons.javareference.demojavaapp.models.entities.Case;
 import uk.gov.ons.javareference.demojavaapp.models.repository.CaseRepository;
 import uk.gov.ons.javareference.demojavaapp.testutil.QueueSpy;
 import uk.gov.ons.javareference.demojavaapp.testutil.RabbitQueueHelper;
@@ -57,6 +58,10 @@ class SampleReceiverIT {
 
       assertThat(outboundCaseDto.getAddressLine1()).isEqualTo("Hello");
       assertThat(outboundCaseDto.getPostcode()).isEqualTo("World");
+
+      Case caze = caseRepository.findById(outboundCaseDto.getId()).get();
+
+      assertThat(caze.getMetadata().getAddressString()).isEqualTo("Hello World");
     }
   }
 }
