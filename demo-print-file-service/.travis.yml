@@ -1,0 +1,33 @@
+dist: xenial
+
+sudo: required
+
+services:
+  - docker
+
+language: python
+
+python:
+  - "3.9"
+
+before_install:
+  - python -m pip install --upgrade pip
+  - python -m pip install --upgrade py
+
+install:
+  - pip install -U pipenv
+  - pipenv install --dev --deploy
+
+script:
+  - mkdir working_files
+  - mkdir working_files/partial_files && mkdir working_files/encrypted_files && mkdir working_files/quarantined_files
+  - sudo chmod -R 777 working_files/
+  - make build_and_integration_tests_no_clean
+
+env:
+  global:
+    - PIPENV_IGNORE_VIRTUALENVS=1
+
+branches:
+  only:
+    - main

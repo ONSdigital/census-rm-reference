@@ -1,0 +1,9 @@
+
+[tool.vulture]
+ignore_decorators = []
+ignore_names = ["side_effect", "message_id", "init_logger", "clear_down_sftp_folders"]
+make_whitelist = true
+# 10 is very low, might need to adjust depending on circumstances
+min_confidence = 10
+paths = ["."]
+sort_by_size = true

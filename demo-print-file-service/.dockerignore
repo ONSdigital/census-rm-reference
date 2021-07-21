@@ -1,0 +1,9 @@
+.*
+dummy_keys/
+dummy_supplier_config.json/
+test
+Makefile
+partial_files/
+encrypted_files/
+quarantined_files/
+working_files/

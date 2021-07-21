@@ -1,7 +1,9 @@
 Feature: Rabbitmq messages go in and out
 
   Scenario: Message in, message out
-    When a message is put on the inbound queue
-    Then a message is put on the outbound queue
+    Given a message is put on the inbound queue
+    And a message is put on the outbound queue
+    When a print action rule has been created
+    And a print file is created with correct rows
     
 

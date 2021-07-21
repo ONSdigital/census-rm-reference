@@ -8,6 +8,10 @@ behave = "*"
 pika = "*"
 structlog = "*"
 requests = "*"
+psycopg2-binary = "*"
+tenacity = "*"
+paramiko = "*"
+pgpy = "*"
 
 [dev-packages]
 "flake8" = "*"
