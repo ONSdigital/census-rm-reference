@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+flake8 = "*"
+vulture = "*"
+
+[packages]
+pika = "*"
+structlog = "*"
+pgpy = "*"
+paramiko = "*"
+requests = "*"
+google-cloud-storage = "*"
+tenacity = "*"
+
+[requires]
+python_version = "3.9"

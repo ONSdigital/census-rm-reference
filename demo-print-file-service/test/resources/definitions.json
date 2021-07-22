@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "h7urxieBFK6Z5FQ9i4lZwc6S2wMonSs1c76rKx0PDM5KMFHc",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "queues": [
+    {
+      "name": "caseProcessor.printFileSvc.printBatchRow",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ]
+}

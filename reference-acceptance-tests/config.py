@@ -1,4 +1,6 @@
+import json
 import os
+from pathlib import Path
 
 
 class Config:
@@ -16,9 +18,7 @@ class Config:
     RABBITMQ_OUTBOUND_QUEUE = os.getenv('RABBITMQ_OUTBOUND_QUEUE', 'case.sample.outbound')
     RABBITMQ_INBOUND_EXCHANGE = os.getenv('RABBITMQ_INBOUND_EXCHANGE', 'inbound-exchange')
     RABBITMQ_INBOUND_ROUTING_KEY = os.getenv('RABBITMQ_INBOUND_ROUTING_KEY',
-                                             'case.sample.inbound')
-    RABBITMQ_OUTBOUND_ROUTING_KEY = os.getenv('RABBITMQ_OUTBOUND_ROUTING_KEY',
-                                              'case.sample.outbound')
+                                             'demo-routing-key-in')
 
     RABBITMQ_EXCHANGE = os.getenv('RABBITMQ_EXCHANGE', '')
     RABBITMQ_USER = os.getenv('RABBITMQ_USER', 'guest')
@@ -32,3 +32,15 @@ class Config:
     DB_NAME = os.getenv('DB_NAME', 'postgres')
     DB_ACTION_CERTIFICATES = os.getenv('DB_ACTION_CERTIFICATES', '')
     DB_CASE_CERTIFICATES = os.getenv('DB_CASE_CERTIFICATES', '')
+
+    SFTP_HOST = os.getenv('SFTP_HOST', 'localhost')
+    SFTP_PORT = os.getenv('SFTP_PORT', '122')
+    SFTP_USERNAME = os.getenv('SFTP_USERNAME', 'centos')
+    SFTP_KEY_FILENAME = os.getenv('SFTP_KEY_FILENAME', 'dummy_rsa')
+    SFTP_PASSPHRASE = os.getenv('SFTP_PASSPHRASE', 'dummy_secret')
+
+    SUPPLIER_CONFIG_JSON_PATH = Path(
+        os.getenv('SUPPLIER_CONFIG_JSON_PATH') or Path(__file__).parent.joinpath('dummy_supplier_config.json'))
+    SUPPLIERS_CONFIG = json.loads(
+        SUPPLIER_CONFIG_JSON_PATH.read_text()) \
+        if SUPPLIER_CONFIG_JSON_PATH and SUPPLIER_CONFIG_JSON_PATH.exists() else None

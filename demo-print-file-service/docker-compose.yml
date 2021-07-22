@@ -1,0 +1,55 @@
+version: '3'
+services:
+  rabbitmq:
+    container_name: dev-print-file-service-rabbitmq
+    image: rabbitmq:3.8-management
+    ports:
+      - "35672:5672"
+      - "49672:15672"
+    environment:
+      - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
+    volumes:
+      - ./test/resources/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./test/resources/definitions.json:/opt/definitions.json
+
+  sftp:
+    container_name: dev-print-file-service-sftp
+    image: atmoz/sftp
+    volumes:
+      - ./dummy_keys/dummy_rsa.pub:/home/centos/.ssh/keys/dummy_rsa.pub:ro
+    ports:
+      - "2222:22"
+    command: centos::::supplier_A,supplier_B
+
+
+  print-file-service:
+    container_name: dev-print-file-service
+    image: eu.gcr.io/census-rm-ci/rm/demo-print-file-service:latest
+    environment:
+      - RABBIT_HOST=dev-print-file-service-rabbitmq
+      - RABBIT_PORT=5672
+      - RABBIT_VIRTUALHOST=/
+      - RABBIT_USERNAME=guest
+      - RABBIT_PASSWORD=guest
+      - RABBIT_QUEUE=caseProcessor.printFileSvc.printBatchRow
+      - READINESS_FILE_PATH=/tmp/ready
+      - SFTP_HOST=dev-print-file-service-sftp
+      - SFTP_PORT=22
+      - SFTP_USERNAME=centos
+      - SFTP_KEY_FILENAME=/home/printfile/dummy_keys/dummy_rsa
+      - SFTP_PASSPHRASE=dummy_secret
+      - ENVIRONMENT=DEV
+      - QUARANTINED_FILES_DIRECTORY=/home/printfile/working_files/quarantined_files
+      - PARTIAL_FILES_DIRECTORY=/home/printfile/working_files/partial_files
+      - ENCRYPTED_FILES_DIRECTORY=/home/printfile/working_files/encrypted_files
+      - SUPPLIER_CONFIG_JSON_PATH=/home/printfile/dummy_supplier_config.json
+      - SUPPLIER_KEY_DIRECTORY=/home/printfile/dummy_keys
+    volumes:
+      - ./working_files:/home/printfile/working_files
+      - ./dummy_keys:/home/printfile/dummy_keys
+      - ./dummy_supplier_config.json:/home/printfile/dummy_supplier_config.json
+    restart: always
+    healthcheck:
+      test: sh -c "[ -f /tmp/ready ]"
+      interval: 2s
+      retries: 20
