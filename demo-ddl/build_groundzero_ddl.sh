@@ -1,7 +1,5 @@
 #!/bin/bash
-rm groundzero_ddl/casev3.sql
-rm groundzero_ddl/uacqid.sql
-rm groundzero_ddl/exceptionmanager.sql
+rm groundzero_ddl/cases.sql
 rm -rf git_cloned_src
 
 mkdir -p git_cloned_src/uk/gov/ons/javareference/demojavaprocessor/models/entities
