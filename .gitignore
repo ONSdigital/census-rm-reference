@@ -127,3 +127,4 @@ demo-java-processor/.mvn/wrapper/maven-wrapper.jar
 demo-java-processor/.mvn/wrapper/maven-wrapper.jar
 demo-java-processor/mvnw
 demo-java-processor/mvnw.cmd
+/demo-ddl/target/
